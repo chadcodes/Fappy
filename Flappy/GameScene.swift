@@ -8,15 +8,9 @@
 
 import SpriteKit
 
-
 class GameScene: SKScene, SKPhysicsContactDelegate {
-
-    enum BodyType:UInt32 {
-        case wall = 1
-        case ground = 2
-        case player = 3
-    }
     
+    // Collision detection, bitwise operators?
     let playerCategory: UInt32 = 0x1 << 0
     let wallCategory: UInt32 = 0x1 << 1
     
@@ -26,111 +20,108 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     override func didMoveToView(view: SKView) {
         /* Setup your scene here */
         
-        // setup the contact delegate
-        physicsWorld.contactDelegate = self
+        // Setup the physics contact delegate
+        // This fires on any contact
+        self.physicsWorld.contactDelegate = self
         
-        // add the bird
-        self.createPlayer()
-        
-        // add the ground
-        // params: top, bottom
-        self.createBounds(CGFloat(20), bottom: CGFloat(20))
-
-        // add the background
-        // params: bg image, velocity, zindex
-        self.addBackground(SKTexture(imageNamed: "bg.png"), velocity: Double(9), zindex: CGFloat(1))
+        // Initialize the scene
+        self.initFappyScene()
     }
     
-    // create the bird method
-    func createPlayer() {
+    // Creates the Fappy scene
+    func initFappyScene() {
+
+        // Create the player as a global
+        self.player = createPlayer()
         
-        // Add character frames
+        // Add the player to the view
+        self.addChild(player)
+        
+        // Add the ground as a local
+        // params: x, y
+        let ground = createBoundary(CGFloat(0), bottom: CGFloat(20))
+        self.addChild(ground)
+
+        // Add the ceiling as a local
+        let ceiling = createBoundary(CGFloat(0), bottom: CGFloat(self.frame.height - 20))
+        self.addChild(ceiling)
+        
+        // Add the background as a local
+        // params: bg image, velocity, zindex
+        addBackground(SKTexture(imageNamed: "bg.png"), velocity: Double(9), zindex: CGFloat(1))
+    }
+    
+    // Create the player node. This returns an SKSpriteNode. The
+    // player is an object and will need to be added to the scene.
+    func createPlayer() -> SKSpriteNode {
+        
+        // Add player frames
         let playerTexture1 = SKTexture(imageNamed: "flappy1.png")
         let playerTexture2 = SKTexture(imageNamed: "flappy2.png")
         
-        // Create animation
+        // Create player animation
         let animation = SKAction.animateWithTextures([playerTexture1, playerTexture2], timePerFrame: 0.1)
         let makePlayerAnimate = SKAction.repeatActionForever(animation)
         
         // Assign texture
-        player = SKSpriteNode(texture: playerTexture1)
+        let player = SKSpriteNode(texture: playerTexture1)
         
         // Add position on screen
         player.position = CGPoint(x: CGRectGetMidX(self.frame), y: CGRectGetMidY(self.frame))
         
-        // Run the animation
-        player.runAction(makePlayerAnimate)
-        
         // Physics properties
         player.physicsBody = SKPhysicsBody(circleOfRadius: player.size.height/2)
-        //        player.physicsBody?.dynamic = true
-        //        player.physicsBody?.allowsRotation = false
-        //        player.physicsBody?.categoryBitMask = BodyType.ground.toRaw()
+        player.physicsBody?.usesPreciseCollisionDetection = true
+        player.physicsBody?.categoryBitMask = playerCategory
         
-        // Add character body
-        var body:SKPhysicsBody = SKPhysicsBody(circleOfRadius: (playerTexture1.size().width / 2))
-        body.dynamic = true
-        body.categoryBitMask = BodyType.player.toRaw()
-        self.physicsBody = body
-        body.collisionBitMask = BodyType.ground.toRaw()
-        body.contactTestBitMask = BodyType.ground.toRaw()
+        // Run the animation
+        player.runAction(makePlayerAnimate)
         
         // zIndex for the character
         player.zPosition = 10
         
-        self.addChild(player)
+        // Return the player as an object
+        return player
     }
     
-    // Physics Contact
-    func didBeginContact(contact: SKPhysicsContact) {
-        // called automatically with 2 objects begin contact
-        let contactMask = contact.bodyA.categoryBitMask | contact.bodyA.categoryBitMask
+    // Create a game boundary
+    func createBoundary(top:CGFloat, bottom:CGFloat) -> SKSpriteNode {
         
-        switch(contactMask) {
-            case BodyType.ground.toRaw():
-            // either the contactMask was the ground or the wall
-            println("contact")
-            default:
-            return
-        }
-    }
-    
-    func didEndContact(contact: SKPhysicsContact) {
-        // called automatically with 2 objects end contact
-
-    }
-    
-    
-    
-    // create game bounds
-    func createBounds(top:CGFloat, bottom:CGFloat) {
-        // Define ceiling
-        let ceiling = SKNode()
-        ceiling.position = CGPointMake(0, self.frame.height - top)
-        ceiling.physicsBody = SKPhysicsBody(rectangleOfSize: CGSizeMake(self.frame.size.width * 2, 1))
-        ceiling.physicsBody?.dynamic = false
-        self.addChild(ceiling)
-        // Define ground
-        let ground = SKNode()
-        ground.position = CGPointMake(0, bottom)
-        ground.physicsBody = SKPhysicsBody(rectangleOfSize: CGSizeMake(self.frame.size.width * 2, 1))
-        // make sure the ground doesn't move
-        ground.physicsBody?.dynamic = false
-        // add the ground to our scene
-        self.addChild(ground)
+        // Create boundary node
+        let boundary = SKSpriteNode()
+        
+        // Define boundary position
+        boundary.position = CGPointMake(top, bottom)
+        
+        // Set boundary physics body
+        boundary.physicsBody = SKPhysicsBody(rectangleOfSize: CGSizeMake(self.frame.size.width * 2, 1))
+        
+        // Setup collision detection
+        boundary.physicsBody?.dynamic = false
+        boundary.physicsBody?.usesPreciseCollisionDetection = true
+        boundary.physicsBody?.categoryBitMask = wallCategory
+        boundary.physicsBody?.collisionBitMask = wallCategory | playerCategory
+        boundary.physicsBody?.contactTestBitMask = wallCategory | playerCategory
+        
+        // Return the boundary as an object
+        return boundary
     }
 
-    // method for infinite scrolling BG
+    // Method for infinite scrolling BG
     func addBackground(background:SKTexture, velocity:Double, zindex:CGFloat) {
-        // define the background texture
+        
+        // Define the background texture
         let backgroundTexture = background
-        // move the bg from right to left
+        
+        // Move the bg from right to left
         var shiftBackground = SKAction.moveByX(-backgroundTexture.size().width, y: 0, duration: velocity)
         var replaceBackground = SKAction.moveByX(backgroundTexture.size().width, y: 0, duration: 0)
         var movingAndReplacingBackground = SKAction.repeatActionForever(SKAction.sequence([shiftBackground, replaceBackground]))
-        // piece 3 copies of the BG together
+        
+        // Piece 3 copies of the BG together
         for var i:CGFloat = 0; i<3; i++ {
-            // define bg, give it a height and moving width
+            
+            // Define bg, give it a height and moving width
             var background = SKSpriteNode(texture: backgroundTexture)
             background.position = CGPoint(x: backgroundTexture.size().width / 2 + (backgroundTexture.size().width * i), y: CGRectGetMidY(self.frame))
             background.size.height = self.frame.height
@@ -140,18 +131,35 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
     }
     
+    /* Physics Begin Contact */
+    // Called automatically when 2 objects begin contact
+    func didBeginContact(contact: SKPhysicsContact) {
+        
+        // If contact was made between the wall or the player
+        if (contact.bodyA.categoryBitMask == wallCategory) && (contact.bodyB.categoryBitMask == playerCategory) {
+            println("contact made")
+        }
+    }
+    
+    /* Physics End Contact */
+    // Called automatically when 2 objects end contact
+    func didEndContact(contact: SKPhysicsContact) {
+        
+        // Called automatically with 2 objects end contact
+        // If contact was made between the wall or the player
+        if (contact.bodyA.categoryBitMask == wallCategory) && (contact.bodyB.categoryBitMask == playerCategory) {
+            println("contact ended")
+        }
+    }
+    
     override func touchesBegan(touches: NSSet, withEvent event: UIEvent) {
         /* Called when a touch begins */
         
         player.physicsBody?.velocity = CGVectorMake(0, 0)
-        player.physicsBody?.applyImpulse(CGVectorMake(0, 60))
+        player.physicsBody?.applyImpulse(CGVectorMake(0, 100))
         
         for touch: AnyObject in touches {
             let location = touch.locationInNode(self)
-            
-//            if location == player.position {
-//                println()
-//            }
         }
     }
    
