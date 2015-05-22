@@ -7,15 +7,35 @@
 //
 
 import SpriteKit
+import AVFoundation
 
 class GameScene: SKScene, SKPhysicsContactDelegate {
     
+    var background = Background()
+    
+//    var _self = self
+
     // Collision detection, bitwise operators?
     let playerCategory: UInt32 = 0x1 << 0
     let wallCategory: UInt32 = 0x1 << 1
     
+    // Count player taps
+    var taps:Int = 0
+    
+    // Set score
+    var score:Int = 0
+    
+    // Set wall speed
+    var wallSpeed:Double = 150
+
     // Player character Node
     var player = SKSpriteNode()
+    
+    // Add background music player
+    var backgroundMusic = AVAudioPlayer()
+    
+    // Add score label
+    var scoreLabel = SKLabelNode()
     
     override func didMoveToView(view: SKView) {
         /* Setup your scene here */
@@ -25,7 +45,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         self.physicsWorld.contactDelegate = self
         
         // Initialize the scene
-        self.initFappyScene()
+//        self.initStartScene()
+
+        // Initialize the scene
+         self.initFappyScene()
+    }
+    
+    // Start screen
+    func initStartScene() {
+        
     }
     
     // Creates the Fappy scene
@@ -39,16 +67,60 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         // Add the ground as a local
         // params: x, y
-        let ground = createBoundary(CGFloat(0), bottom: CGFloat(20))
+        let ground = createBoundary(CGFloat(0), y: CGFloat(20))
         self.addChild(ground)
 
         // Add the ceiling as a local
-        let ceiling = createBoundary(CGFloat(0), bottom: CGFloat(self.frame.height - 20))
+        let ceiling = createBoundary(CGFloat(0), y: CGFloat(self.frame.height - 20))
         self.addChild(ceiling)
         
-        // Add the background as a local
-        // params: bg image, velocity, zindex
-        addBackground(SKTexture(imageNamed: "bg.png"), velocity: Double(9), zindex: CGFloat(1))
+        // Start the game Sound
+        backgroundMusic = self.setupAudioPlayerWithFile("808DubBeat", type: "wav")
+        backgroundMusic.numberOfLoops = -1
+        backgroundMusic.play()
+        
+        // Add the score
+        createScoreBoard()
+        
+        // Add the walls
+        createWalls()
+        var timer = NSTimer.scheduledTimerWithTimeInterval(2, target: self, selector: Selector("createWalls"), userInfo: nil, repeats: true)
+
+        // Add the backgrounds
+        // params: image, velocity, zindex, view
+        background.addBackground1(SKTexture(imageNamed: "fappy_bg_02.png"), velocity: Double(30), zindex: CGFloat(1), view:self)
+
+        background.addBackground2(SKTexture(imageNamed: "fappy_bg_03.png"), velocity: Double(12), zindex: CGFloat(2), view:self)
+        
+        // Add static bg
+        var staticBgTexture = SKTexture(imageNamed: "fappy_bg_01.png")
+        var staticBg = SKSpriteNode(texture: staticBgTexture)
+        staticBg.position = CGPoint(x: CGRectGetMidX(self.frame), y: CGRectGetMidY(self.frame))
+        staticBg.zPosition = 0
+        self.addChild(staticBg)
+    }
+    
+    func createScoreBoard() {
+        self.scoreLabel.fontName = "chalkduster"
+        self.scoreLabel.fontSize = 100
+        self.scoreLabel.position = CGPointMake(CGRectGetMidX(self.frame), self.frame.height - 150)
+        self.scoreLabel.zPosition = 11
+        self.scoreLabel.text = "0"
+        self.addChild(scoreLabel)
+    }
+    
+    func updateScore() {
+        self.scoreLabel.text = String(taps)
+    }
+    
+    func increaseScore() {
+        score += 1
+    }
+    
+    //
+    func countTaps() {
+        taps += 1
+        updateScore()
     }
     
     // Create the player node. This returns an SKSpriteNode. The
@@ -73,6 +145,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         player.physicsBody = SKPhysicsBody(circleOfRadius: player.size.height/2)
         player.physicsBody?.usesPreciseCollisionDetection = true
         player.physicsBody?.categoryBitMask = playerCategory
+        player.physicsBody?.allowsRotation = false
         
         // Run the animation
         player.runAction(makePlayerAnimate)
@@ -80,18 +153,18 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         // zIndex for the character
         player.zPosition = 10
         
-        // Return the player as an object
+        // Return the player as an SKSpriteNode object
         return player
     }
     
     // Create a game boundary
-    func createBoundary(top:CGFloat, bottom:CGFloat) -> SKSpriteNode {
+    func createBoundary(x:CGFloat, y:CGFloat) -> SKSpriteNode {
         
         // Create boundary node
         let boundary = SKSpriteNode()
         
         // Define boundary position
-        boundary.position = CGPointMake(top, bottom)
+        boundary.position = CGPointMake(x, y)
         
         // Set boundary physics body
         boundary.physicsBody = SKPhysicsBody(rectangleOfSize: CGSizeMake(self.frame.size.width * 2, 1))
@@ -103,32 +176,60 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         boundary.physicsBody?.collisionBitMask = wallCategory | playerCategory
         boundary.physicsBody?.contactTestBitMask = wallCategory | playerCategory
         
-        // Return the boundary as an object
+        // Return the boundary as an SKSpriteNode object
         return boundary
     }
-
-    // Method for infinite scrolling BG
-    func addBackground(background:SKTexture, velocity:Double, zindex:CGFloat) {
+    
+    // Create the walls
+    func createWalls() {
         
-        // Define the background texture
-        let backgroundTexture = background
+        // create the gap height bigger than the player
+        let gapHeight = player.size.height * 4.3
         
-        // Move the bg from right to left
-        var shiftBackground = SKAction.moveByX(-backgroundTexture.size().width, y: 0, duration: velocity)
-        var replaceBackground = SKAction.moveByX(backgroundTexture.size().width, y: 0, duration: 0)
-        var movingAndReplacingBackground = SKAction.repeatActionForever(SKAction.sequence([shiftBackground, replaceBackground]))
+        var moveWallsLeft = SKAction.moveByX(-self.frame.size.width * 2, y: 0, duration: NSTimeInterval(self.frame.width / CGFloat(wallSpeed)))
+        var removeWall = SKAction.removeFromParent()
+        var moveAndRemove = SKAction.repeatActionForever(SKAction.sequence([moveWallsLeft, removeWall]))
+        var movementAmount = arc4random() % UInt32(self.frame.size.height / 2)
+        var wallOffset = CGFloat(movementAmount) - self.frame.size.height / 4
         
-        // Piece 3 copies of the BG together
-        for var i:CGFloat = 0; i<3; i++ {
-            
-            // Define bg, give it a height and moving width
-            var background = SKSpriteNode(texture: backgroundTexture)
-            background.position = CGPoint(x: backgroundTexture.size().width / 2 + (backgroundTexture.size().width * i), y: CGRectGetMidY(self.frame))
-            background.size.height = self.frame.height
-            background.runAction(movingAndReplacingBackground)
-            background.zPosition = zindex
-            self.addChild(background)
-        }
+        var wallTexture1 = SKTexture(imageNamed: "pipe1.png")
+        var wall1 = SKSpriteNode(texture: wallTexture1)
+        wall1.position = CGPoint(x: CGRectGetMidX(self.frame) + self.frame.size.width, y: CGRectGetMidY(self.frame) + (wall1.size.height/2) + ( gapHeight / 2 ) + wallOffset)
+        wall1.runAction(moveAndRemove)
+        
+        wall1.physicsBody = SKPhysicsBody(rectangleOfSize: wall1.size)
+        wall1.physicsBody?.dynamic = false
+        wall1.physicsBody?.categoryBitMask = wallCategory
+        wall1.zPosition = 5
+        self.addChild(wall1);
+        
+        var wallTexture2 = SKTexture(imageNamed: "pipe2.png")
+        var wall2 = SKSpriteNode(texture: wallTexture2)
+        wall2.position = CGPoint(x: CGRectGetMidX(self.frame) + self.frame.size.width, y: (CGRectGetMidY(self.frame) - wall2.size.height / 2 - gapHeight/2 + wallOffset))
+        wall2.runAction(moveAndRemove)
+        
+        wall2.physicsBody = SKPhysicsBody(rectangleOfSize: wall2.size)
+        wall2.physicsBody?.dynamic = false
+        wall2.physicsBody?.categoryBitMask = wallCategory
+        wall2.zPosition = 5
+        self.addChild(wall2);
+        
+//        println("Wall 1: \(wall1.position)")
+        
+        
+        
+    }
+    
+    /* Audio stuff */
+    // Returns an AVAudioPlayer object
+    // params: filename, type/extension
+    func setupAudioPlayerWithFile(file:NSString, type:NSString) -> AVAudioPlayer  {
+        var path = NSBundle.mainBundle().pathForResource(file as String, ofType: type as String)
+        var url = NSURL.fileURLWithPath(path!)
+        var error: NSError?
+        var audioPlayer:AVAudioPlayer?
+        audioPlayer = AVAudioPlayer(contentsOfURL: url, error: &error)
+        return audioPlayer!
     }
     
     /* Physics Begin Contact */
@@ -145,20 +246,23 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     // Called automatically when 2 objects end contact
     func didEndContact(contact: SKPhysicsContact) {
         
-        // Called automatically with 2 objects end contact
-        // If contact was made between the wall or the player
+        // Called automatically when 2 objects end contact
+        // If contact was ended between the wall or the player
         if (contact.bodyA.categoryBitMask == wallCategory) && (contact.bodyB.categoryBitMask == playerCategory) {
             println("contact ended")
         }
     }
     
-    override func touchesBegan(touches: NSSet, withEvent event: UIEvent) {
+    override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
         /* Called when a touch begins */
         
-        player.physicsBody?.velocity = CGVectorMake(0, 0)
-        player.physicsBody?.applyImpulse(CGVectorMake(0, 100))
+        // add to the tap counter
+        countTaps()
         
-        for touch: AnyObject in touches {
+        player.physicsBody?.velocity = CGVectorMake(0, 0)
+        player.physicsBody?.applyImpulse(CGVectorMake(0, 60))
+        
+        for touch in (touches as! Set<UITouch>) {
             let location = touch.locationInNode(self)
         }
     }

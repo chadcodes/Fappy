@@ -20,6 +20,19 @@
 		D766DB301B0CD65500FA3122 /* flappy2.png in Resources */ = {isa = PBXBuildFile; fileRef = D766DB2B1B0CD65500FA3122 /* flappy2.png */; };
 		D766DB311B0CD65500FA3122 /* pipe1.png in Resources */ = {isa = PBXBuildFile; fileRef = D766DB2C1B0CD65500FA3122 /* pipe1.png */; };
 		D766DB321B0CD65500FA3122 /* pipe2.png in Resources */ = {isa = PBXBuildFile; fileRef = D766DB2D1B0CD65500FA3122 /* pipe2.png */; };
+		D7D658FA1B0F748600319DF0 /* z001.png in Resources */ = {isa = PBXBuildFile; fileRef = D7D658F61B0F748600319DF0 /* z001.png */; };
+		D7D658FB1B0F748600319DF0 /* z002.png in Resources */ = {isa = PBXBuildFile; fileRef = D7D658F71B0F748600319DF0 /* z002.png */; };
+		D7D658FC1B0F748600319DF0 /* z003.png in Resources */ = {isa = PBXBuildFile; fileRef = D7D658F81B0F748600319DF0 /* z003.png */; };
+		D7D658FD1B0F748600319DF0 /* z004.png in Resources */ = {isa = PBXBuildFile; fileRef = D7D658F91B0F748600319DF0 /* z004.png */; };
+		D7D659311B0F84BF00319DF0 /* bg_02.png in Resources */ = {isa = PBXBuildFile; fileRef = D7D659301B0F84BF00319DF0 /* bg_02.png */; };
+		D7D659331B0F886A00319DF0 /* bg_01.png in Resources */ = {isa = PBXBuildFile; fileRef = D7D659321B0F886A00319DF0 /* bg_01.png */; };
+		D7D659351B0F893C00319DF0 /* fappy_bg_01.png in Resources */ = {isa = PBXBuildFile; fileRef = D7D659341B0F893C00319DF0 /* fappy_bg_01.png */; };
+		D7D659371B0F8F5600319DF0 /* fappy_bg_02.png in Resources */ = {isa = PBXBuildFile; fileRef = D7D659361B0F8F5600319DF0 /* fappy_bg_02.png */; };
+		D7D659391B0F907400319DF0 /* Background.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7D659381B0F907400319DF0 /* Background.swift */; };
+		D7D6593B1B0F9C3D00319DF0 /* fappy_tree_01.png in Resources */ = {isa = PBXBuildFile; fileRef = D7D6593A1B0F9C3D00319DF0 /* fappy_tree_01.png */; };
+		D7D6593D1B0F9C9A00319DF0 /* fappy_bg_03.png in Resources */ = {isa = PBXBuildFile; fileRef = D7D6593C1B0F9C9A00319DF0 /* fappy_bg_03.png */; };
+		D7E540A71B0E53CC00B43CC8 /* 808DubBeat.wav in Resources */ = {isa = PBXBuildFile; fileRef = D7E540A61B0E53CC00B43CC8 /* 808DubBeat.wav */; };
+		D7E540A91B0E680A00B43CC8 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D7E540A81B0E680A00B43CC8 /* AVFoundation.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -50,6 +63,19 @@
 		D766DB2B1B0CD65500FA3122 /* flappy2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = flappy2.png; path = ../../../../../../Downloads/img/flappy2.png; sourceTree = "<group>"; };
 		D766DB2C1B0CD65500FA3122 /* pipe1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = pipe1.png; path = ../../../../../../Downloads/img/pipe1.png; sourceTree = "<group>"; };
 		D766DB2D1B0CD65500FA3122 /* pipe2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = pipe2.png; path = ../../../../../../Downloads/img/pipe2.png; sourceTree = "<group>"; };
+		D7D658F61B0F748600319DF0 /* z001.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = z001.png; path = "../../../../../../Desktop/game-backgrounds/z001.png"; sourceTree = "<group>"; };
+		D7D658F71B0F748600319DF0 /* z002.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = z002.png; path = "../../../../../../Desktop/game-backgrounds/z002.png"; sourceTree = "<group>"; };
+		D7D658F81B0F748600319DF0 /* z003.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = z003.png; path = "../../../../../../Desktop/game-backgrounds/z003.png"; sourceTree = "<group>"; };
+		D7D658F91B0F748600319DF0 /* z004.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = z004.png; path = "../../../../../../Desktop/game-backgrounds/z004.png"; sourceTree = "<group>"; };
+		D7D659301B0F84BF00319DF0 /* bg_02.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = bg_02.png; path = "../../../../../../Desktop/game-backgrounds/bg_02.png"; sourceTree = "<group>"; };
+		D7D659321B0F886A00319DF0 /* bg_01.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = bg_01.png; path = "../../../../../../Desktop/game-backgrounds/bg_01.png"; sourceTree = "<group>"; };
+		D7D659341B0F893C00319DF0 /* fappy_bg_01.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = fappy_bg_01.png; path = "../../../../../../Desktop/game-backgrounds/fappy_bg_01.png"; sourceTree = "<group>"; };
+		D7D659361B0F8F5600319DF0 /* fappy_bg_02.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = fappy_bg_02.png; path = "../../../../../../Desktop/game-backgrounds/fappy_bg_02.png"; sourceTree = "<group>"; };
+		D7D659381B0F907400319DF0 /* Background.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Background.swift; sourceTree = "<group>"; };
+		D7D6593A1B0F9C3D00319DF0 /* fappy_tree_01.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = fappy_tree_01.png; path = "../../../../../../Desktop/game-backgrounds/fappy_tree_01.png"; sourceTree = "<group>"; };
+		D7D6593C1B0F9C9A00319DF0 /* fappy_bg_03.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = fappy_bg_03.png; path = "../../../../../../Desktop/game-backgrounds/fappy_bg_03.png"; sourceTree = "<group>"; };
+		D7E540A61B0E53CC00B43CC8 /* 808DubBeat.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = 808DubBeat.wav; path = "../../../../../../Desktop/dub effects/808DubBeat.wav"; sourceTree = "<group>"; };
+		D7E540A81B0E680A00B43CC8 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,6 +83,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D7E540A91B0E680A00B43CC8 /* AVFoundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -73,6 +100,7 @@
 		D766DAE01B0CCEBA00FA3122 = {
 			isa = PBXGroup;
 			children = (
+				D7E540A81B0E680A00B43CC8 /* AVFoundation.framework */,
 				D766DAEB1B0CCEBA00FA3122 /* Flappy */,
 				D766DB051B0CCEBB00FA3122 /* FlappyTests */,
 				D766DAEA1B0CCEBA00FA3122 /* Products */,
@@ -91,10 +119,22 @@
 		D766DAEB1B0CCEBA00FA3122 /* Flappy */ = {
 			isa = PBXGroup;
 			children = (
+				D7E540A61B0E53CC00B43CC8 /* 808DubBeat.wav */,
+				D7D6593A1B0F9C3D00319DF0 /* fappy_tree_01.png */,
+				D7D6593C1B0F9C9A00319DF0 /* fappy_bg_03.png */,
+				D7D659321B0F886A00319DF0 /* bg_01.png */,
+				D7D659341B0F893C00319DF0 /* fappy_bg_01.png */,
+				D7D659361B0F8F5600319DF0 /* fappy_bg_02.png */,
+				D7D659301B0F84BF00319DF0 /* bg_02.png */,
+				D7D658F61B0F748600319DF0 /* z001.png */,
+				D7D658F71B0F748600319DF0 /* z002.png */,
+				D7D658F81B0F748600319DF0 /* z003.png */,
+				D7D658F91B0F748600319DF0 /* z004.png */,
 				D766DB291B0CD65500FA3122 /* bg.png */,
 				D766DB2A1B0CD65500FA3122 /* flappy1.png */,
 				D766DB2B1B0CD65500FA3122 /* flappy2.png */,
 				D766DB2C1B0CD65500FA3122 /* pipe1.png */,
+				D7D659381B0F907400319DF0 /* Background.swift */,
 				D766DB2D1B0CD65500FA3122 /* pipe2.png */,
 				D766DAEE1B0CCEBA00FA3122 /* AppDelegate.swift */,
 				D766DAF01B0CCEBA00FA3122 /* GameScene.sks */,
@@ -213,12 +253,23 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D7D6593D1B0F9C9A00319DF0 /* fappy_bg_03.png in Resources */,
+				D7D6593B1B0F9C3D00319DF0 /* fappy_tree_01.png in Resources */,
+				D7D658FD1B0F748600319DF0 /* z004.png in Resources */,
+				D7D658FA1B0F748600319DF0 /* z001.png in Resources */,
 				D766DB301B0CD65500FA3122 /* flappy2.png in Resources */,
 				D766DB2E1B0CD65500FA3122 /* bg.png in Resources */,
 				D766DAFD1B0CCEBB00FA3122 /* LaunchScreen.xib in Resources */,
+				D7D659331B0F886A00319DF0 /* bg_01.png in Resources */,
+				D7E540A71B0E53CC00B43CC8 /* 808DubBeat.wav in Resources */,
 				D766DB311B0CD65500FA3122 /* pipe1.png in Resources */,
+				D7D658FC1B0F748600319DF0 /* z003.png in Resources */,
+				D7D659371B0F8F5600319DF0 /* fappy_bg_02.png in Resources */,
+				D7D659351B0F893C00319DF0 /* fappy_bg_01.png in Resources */,
 				D766DAFA1B0CCEBB00FA3122 /* Images.xcassets in Resources */,
+				D7D659311B0F84BF00319DF0 /* bg_02.png in Resources */,
 				D766DB321B0CD65500FA3122 /* pipe2.png in Resources */,
+				D7D658FB1B0F748600319DF0 /* z002.png in Resources */,
 				D766DAF11B0CCEBA00FA3122 /* GameScene.sks in Resources */,
 				D766DAF81B0CCEBB00FA3122 /* Main.storyboard in Resources */,
 				D766DB2F1B0CD65500FA3122 /* flappy1.png in Resources */,
@@ -242,6 +293,7 @@
 				D766DAF31B0CCEBA00FA3122 /* GameScene.swift in Sources */,
 				D766DAF51B0CCEBA00FA3122 /* GameViewController.swift in Sources */,
 				D766DAEF1B0CCEBA00FA3122 /* AppDelegate.swift in Sources */,
+				D7D659391B0F907400319DF0 /* Background.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -433,6 +485,7 @@
 				D766DB0E1B0CCEBB00FA3122 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		D766DB0F1B0CCEBB00FA3122 /* Build configuration list for PBXNativeTarget "FlappyTests" */ = {
 			isa = XCConfigurationList;
@@ -441,6 +494,7 @@
 				D766DB111B0CCEBB00FA3122 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
